@@ -56,13 +56,15 @@
             --border-color: #335C8D;
             --nav-bg: rgba(22, 42, 69, 0.92);
             --input-bg: rgba(15, 29, 48, 0.6);
-            --theme-name: "Biru Samudera & Kuning";
+            --theme-name: "Samudera & Kuning";
         }
 
         body {
             background-color: var(--bg-main);
             color: var(--text-main);
             transition: background-color 0.4s ease, color 0.4s ease;
+            top: 0px !important;
+            position: relative !important;
         }
 
         .bg-custom-card {
@@ -102,11 +104,6 @@
             transition: stroke 0.3s ease;
         }
 
-        .svg-accent-fill {
-            fill: var(--primary-accent);
-            transition: fill 0.3s ease;
-        }
-
         /* Glassmorphism Navigation */
         .nav-glass {
             background-color: var(--nav-bg);
@@ -127,9 +124,33 @@
         .glow-active {
             animation: pulseGlow 3s infinite ease-in-out;
         }
+
+        /* Google Translate Overrides */
+        .goog-te-banner-frame.skiptranslate, 
+        .goog-te-banner-frame,
+        .goog-te-balloon-frame,
+        #goog-gt-tt {
+            display: none !important;
+        }
+        
+        body {
+            top: 0px !important;
+        }
+
+        #google_translate_element {
+            display: none !important;
+        }
+
+        .goog-text-highlight {
+            background-color: transparent !important;
+            box-shadow: none !important;
+        }
     </style>
 </head>
 <body class="font-sans antialiased selection:bg-yellow-400 selection:text-black">
+
+    <!-- Google Translate Hidden Container -->
+    <div id="google_translate_element"></div>
 
     <!-- Toast Notification -->
     <div id="toast" class="fixed top-20 right-4 left-4 md:left-auto md:w-96 z-50 transform translate-y-[-150%] opacity-0 transition-all duration-500 pointer-events-none">
@@ -144,13 +165,10 @@
         </div>
     </div>
 
-    <!-- Live Theme Switcher Floating Bar (Client Comparison Tool) -->
-    <div class="fixed bottom-4 right-4 z-40 bg-custom-card p-2 rounded-2xl shadow-2xl flex items-center space-x-2 border border-accent backdrop-blur-md">
-        <span class="text-xs font-semibold px-2 hidden sm:inline text-gray-200">
-            <i class="fa-solid fa-palette text-accent mr-1"></i> Mode Warna:
-        </span>
+    <!-- Live Theme Switcher Floating Bar -->
+    <div class="fixed bottom-4 right-4 z-40 p-2 rounded-2xl shadow-2xl flex items-center space-x-2">
         <button id="themeToggleBtn" onclick="toggleTheme()" class="flex items-center space-x-2 bg-accent text-black font-bold text-xs px-3 py-2 rounded-xl hover:scale-105 active:scale-95 transition-all shadow-md">
-            <i class="fa-solid fa-arrows-rotate"></i>
+            <i class="fa-solid fa-palette"></i>
             <span id="themeLabel">Tema: Hitam & Emas</span>
         </button>
     </div>
@@ -161,64 +179,71 @@
             
             <!-- Logo & Brand Header -->
             <a href="#hero" class="flex items-center space-x-3 group">
-                <!-- Exact Inline SVG Hexagonal Double-R Logo -->
                 <div class="w-11 h-11 flex-shrink-0 relative group-hover:scale-105 transition-transform duration-300">
                     <svg viewBox="0 0 200 200" class="w-full h-full drop-shadow-md">
-                        <!-- Outer Hexagon -->
-                        <polygon points="100,8 180,54 180,146 100,192 20,146 20,54" 
-                                 class="svg-accent" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
-                        <!-- Inner Hexagon Frame -->
-                        <polygon points="100,22 168,61 168,139 100,178 32,139 32,61" 
-                                 class="svg-accent" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" opacity="0.85"/>
-                        
-                        <!-- Left Geometric 'R' -->
-                        <path d="M 60,52 L 95,52 L 95,148 M 60,52 L 60,148 M 60,52 L 95,52 L 95,98 L 60,98 M 65,98 L 95,148" 
-                              class="svg-accent" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
-                        
-                        <!-- Right Geometric 'R' (Parallel Stylized) -->
-                        <path d="M 105,52 L 140,52 L 140,105 L 105,105 L 105,148 M 105,52 L 105,148 M 110,105 L 140,148" 
-                              class="svg-accent" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+                        <polygon points="100,8 180,54 180,146 100,192 20,146 20,54" class="svg-accent" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+                        <polygon points="100,22 168,61 168,139 100,178 32,139 32,61" class="svg-accent" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" opacity="0.85"/>
+                        <path d="M 60,52 L 95,52 L 95,148 M 60,52 L 60,148 M 60,52 L 95,52 L 95,98 L 60,98 M 65,98 L 95,148" class="svg-accent" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M 105,52 L 140,52 L 140,105 L 105,105 L 105,148 M 105,52 L 105,148 M 110,105 L 140,148" class="svg-accent" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
                     </svg>
                 </div>
                 
                 <div>
                     <span class="block text-lg font-extrabold tracking-tight text-white group-hover:text-accent transition-colors">
-                        R&R <span class="text-accent font-medium text-xs sm:text-sm block sm:inline font-normal">Transportation</span>
+                        R&R  <span class="text-accent font-medium text-xs sm:text-sm block sm:inline font-normal">Transportation Services</span>
                     </span>
-                    <span class="block text-[10px] uppercase tracking-widest text-gray-300 font-semibold">Kuta Mandalika, Lombok</span>
+                    <!-- <span class="block text-[10px] uppercase tracking-widest text-gray-300 font-semibold">Kuta Mandalika</span> -->
                 </div>
             </a>
 
-            <!-- Desktop Nav Links -->
-            <nav class="hidden md:flex items-center space-x-6 text-sm font-medium">
-                <a href="#profil" class="hover:text-accent transition-colors">Profil</a>
-                <a href="#layanan" class="hover:text-accent transition-colors">Layanan</a>
-                <!-- <a href="#galeri" class="hover:text-accent transition-colors">Galeri Armada</a> -->
-                <a href="#kontak" class="hover:text-accent transition-colors">Kontak</a>
-                <a href="https://wa.me/6281999709135?text=Halo%20R%26R%20Transportation,%20saya%20ingin%20tanya%20layanan%20transportasi" 
-                   target="_blank" 
-                   class="bg-accent text-black font-bold px-4 py-2 rounded-xl hover:shadow-lg transition-all flex items-center space-x-2 text-xs">
-                    <i class="fa-brands fa-whatsapp text-sm"></i>
-                    <span>WhatsApp</span>
+            <!-- Desktop Nav Links dengan Efek Hover Line & Glow -->
+            <nav class="hidden md:flex items-center space-x-8 text-sm font-medium">
+                <a href="#profil" class="relative py-1 text-gray-200 hover:text-accent transition-all duration-300 group">
+                    <span>Profil</span>
+                    <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-accent transition-all duration-300 group-hover:w-full rounded-full"></span>
+                </a>
+                <a href="#layanan" class="relative py-1 text-gray-200 hover:text-accent transition-all duration-300 group">
+                    <span>Layanan</span>
+                    <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-accent transition-all duration-300 group-hover:w-full rounded-full"></span>
+                </a>
+                <a href="#kontak" class="relative py-1 text-gray-200 hover:text-accent transition-all duration-300 group">
+                    <span>Kontak</span>
+                    <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-accent transition-all duration-300 group-hover:w-full rounded-full"></span>
                 </a>
             </nav>
 
-            <!-- Mobile Menu Toggle Button -->
-            <button onclick="toggleMobileMenu()" class="md:hidden text-gray-200 hover:text-accent text-xl p-2 focus:outline-none">
-                <i class="fa-solid fa-bars" id="menuIcon"></i>
-            </button>
+            <!-- Actions Container (Toggle Bahasa & Mobile Menu Button) -->
+            <div class="flex items-center space-x-3">
+                <!-- Toggle ID | EN (Diletakkan di luar menu dropdown, di sebelah kiri tombol mobile menu) -->
+                <button onclick="toggleLanguage()" 
+                        class="bg-accent text-black font-extrabold px-3 py-1.5 rounded-xl hover:shadow-lg hover:scale-105 active:scale-95 transition-all flex items-center space-x-1.5 text-xs shadow-md">
+                    <i class="fa-solid fa-globe text-xs"></i>
+                    <span class="lang-toggle-label"><strong class="underline font-bold">ID</strong> | EN</span>
+                </button>
+
+                <!-- Mobile Menu Toggle Button -->
+                <button onclick="toggleMobileMenu()" class="md:hidden text-gray-200 hover:text-accent text-xl p-2 rounded-xl hover:bg-white/5 transition-all focus:outline-none">
+                    <i class="fa-solid fa-bars" id="menuIcon"></i>
+                </button>
+            </div>
         </div>
 
-        <!-- Mobile Navigation Menu Dropdown -->
-        <div id="mobileMenu" class="hidden md:hidden bg-custom-card border-b border-white/10 px-6 py-4 space-y-3 transition-all duration-300">
-            <a href="#profil" onclick="toggleMobileMenu()" class="block text-sm font-medium hover:text-accent">Profil Usaha</a>
-            <a href="#layanan" onclick="toggleMobileMenu()" class="block text-sm font-medium hover:text-accent">Layanan</a>
-            <a href="#galeri" onclick="toggleMobileMenu()" class="block text-sm font-medium hover:text-accent">Galeri Armada</a>
-            <a href="#kontak" onclick="toggleMobileMenu()" class="block text-sm font-medium hover:text-accent">Kontak & Reservasi</a>
-            <a href="https://wa.me/6281999709135?text=Halo%20R%26R%20Transportation,%20saya%20ingin%20tanya%20layanan%20transportasi" 
-               target="_blank" 
-               class="block w-full text-center bg-accent text-black font-bold py-2.5 rounded-xl text-xs">
-                <i class="fa-brands fa-whatsapp mr-2"></i> Hubungi WhatsApp
+        <!-- Mobile Navigation Menu Dropdown (Renggang & Nyaman Diklik) -->
+        <div id="mobileMenu" class="hidden md:hidden bg-custom-card border-b border-white/10 px-6 py-6 space-y-3 transition-all duration-300 shadow-2xl">
+            <a href="#profil" onclick="toggleMobileMenu()" 
+               class="flex items-center justify-between text-base font-semibold text-gray-200 hover:text-accent hover:pl-2 py-3 border-b border-white/5 transition-all duration-200 group">
+                <span>Profil Usaha</span>
+                <i class="fa-solid fa-chevron-right text-xs opacity-0 group-hover:opacity-100 transition-opacity text-accent"></i>
+            </a>
+            <a href="#layanan" onclick="toggleMobileMenu()" 
+               class="flex items-center justify-between text-base font-semibold text-gray-200 hover:text-accent hover:pl-2 py-3 border-b border-white/5 transition-all duration-200 group">
+                <span>Layanan</span>
+                <i class="fa-solid fa-chevron-right text-xs opacity-0 group-hover:opacity-100 transition-opacity text-accent"></i>
+            </a>
+            <a href="#kontak" onclick="toggleMobileMenu()" 
+               class="flex items-center justify-between text-base font-semibold text-gray-200 hover:text-accent hover:pl-2 py-3 transition-all duration-200 group">
+                <span>Kontak & Reservasi</span>
+                <i class="fa-solid fa-chevron-right text-xs opacity-0 group-hover:opacity-100 transition-opacity text-accent"></i>
             </a>
         </div>
     </header>
@@ -227,29 +252,23 @@
 
         <!-- Hero Section -->
         <section id="hero" class="relative min-h-[85vh] flex items-center justify-center px-4 sm:px-6 py-12 overflow-hidden">
-            <!-- Background Decorative Glow Gradient -->
             <div class="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 rounded-full opacity-25 blur-3xl pointer-events-none" style="background-color: var(--primary-accent);"></div>
 
             <div class="max-w-4xl mx-auto text-center relative z-10">
-                
-                <!-- Managed By Badge (Owner Secondary Brand) -->
                 <div class="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-custom-card border border-accent mb-6 text-xs sm:text-sm shadow-lg">
                     <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping"></span>
-                    <span class="text-gray-200">Dikelola langsung oleh:</span>
-                    <span class="font-bold text-accent">Muhamad Rendy Wiharno, M.Par</span>
+                    <span class="text-gray-200">Dikelola oleh:</span>
+                    <span class="font-bold text-accent">Muhamad Rendy Wiharno, M.Par.</span>
                 </div>
 
-                <!-- Primary Brand Headline -->
                 <h1 class="text-3xl sm:text-5xl md:text-6xl font-extrabold tracking-tight leading-tight text-white mb-6">
-                    Solusi Transportasi & Wisata Terbaik di <span class="text-accent underline decoration-wavy decoration-1 underline-offset-8">Kuta, Lombok</span>
+                    Solusi Transportasi & Wisata Terbaik di <span class="text-accent underline decoration-wavy decoration-1 underline-offset-8">Mandalika</span>
                 </h1>
 
-                <!-- Subheadline -->
                 <p class="text-base sm:text-xl text-gray-200 max-w-2xl mx-auto font-normal leading-relaxed mb-8">
-                    Layanan antar-jemput bandara, sewa mobil lepas kunci maupun dengan *driver* berpengalaman, serta tur keliling destinasi eksotis Lombok.
+                    Layanan antar-jemput bandara, sewa mobil lepas kunci maupun dengan driver berpengalaman, serta tur keliling destinasi eksotis Lombok.
                 </p>
 
-                <!-- Call to Action Buttons -->
                 <div class="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6">
                     <a href="https://wa.me/6281999709135?text=Halo%20R%26R%20Transportation,%20saya%20ingin%20pesan%20layanan%20transportasi" 
                        target="_blank" 
@@ -265,7 +284,6 @@
                     </a>
                 </div>
 
-                <!-- Key Feature Highlights -->
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 mt-12 text-left">
                     <div class="p-3 sm:p-4 rounded-xl bg-custom-card flex items-center space-x-3">
                         <i class="fa-solid fa-plane-arrival text-accent text-xl sm:text-2xl"></i>
@@ -291,8 +309,8 @@
                     <div class="p-3 sm:p-4 rounded-xl bg-custom-card flex items-center space-x-3">
                         <i class="fa-solid fa-graduation-cap text-accent text-xl sm:text-2xl"></i>
                         <div>
-                            <h4 class="text-xs sm:text-sm font-bold text-white">Standar M.Par.</h4>
-                            <p class="text-[10px] sm:text-xs text-gray-300">Magister Pariwisata</p>
+                            <h4 class="text-xs sm:text-sm font-bold text-white">Standar Ahli</h4>
+                            <p class="text-[10px] sm:text-xs text-gray-300">Profesional Pariwisata</p>
                         </div>
                     </div>
                 </div>
@@ -300,7 +318,7 @@
             </div>
         </section>
 
-        <!-- Section 2: Profil Usaha & Pemilik -->
+        <!-- Section 2: Profil Usaha -->
         <section id="profil" class="py-16 px-4 sm:px-6 max-w-6xl mx-auto">
             <div class="text-center mb-12">
                 <span class="text-xs font-bold uppercase tracking-widest text-accent mb-2 block">Profil & Komitmen</span>
@@ -309,11 +327,9 @@
             </div>
 
             <div class="grid md:grid-cols-12 gap-8 items-center">
-                <!-- Left: Business Badge & Credentials Card -->
                 <div class="md:col-span-5">
                     <div class="bg-custom-card p-6 sm:p-8 rounded-3xl relative overflow-hidden text-center md:text-left">
                         <div class="w-20 h-20 mx-auto md:mx-0 mb-4">
-                            <!-- Exact SVG Logo -->
                             <svg viewBox="0 0 200 200" class="w-full h-full drop-shadow-md">
                                 <polygon points="100,8 180,54 180,146 100,192 20,146 20,54" class="svg-accent" stroke-width="7"/>
                                 <polygon points="100,22 168,61 168,139 100,178 32,139 32,61" class="svg-accent" stroke-width="4" opacity="0.85"/>
@@ -323,15 +339,20 @@
                         </div>
                         <h3 class="text-xl font-bold text-white mb-1">R&R Transportation Services</h3>
                         <p class="text-xs text-accent font-semibold mb-4">Kuta, Lombok Tengah, NTB</p>
-                        
                         <hr class="border-white/10 my-4">
-
                         <div class="space-y-3 text-left text-sm text-gray-200">
                             <div class="flex items-start space-x-3">
                                 <i class="fa-solid fa-user text-accent mt-1"></i>
                                 <div>
-                                    <span class="block text-xs text-gray-300">Pemilik / Owner</span>
-                                    <span class="font-bold text-white">Muhamad Rendy Wiharno, M.Par</span>
+                                    <span class="block text-xs text-gray-300">Pemilik</span>
+                                    <span class="font-bold text-white">Muhamad Rendy Wiharno</span>
+                                </div>
+                            </div>
+                            <div class="flex items-start space-x-3">
+                                <i class="fa-solid fa-award text-accent mt-1"></i>
+                                <div>
+                                    <span class="block text-xs text-gray-300">Kualifikasi</span>
+                                    <span class="font-medium text-white">Magister Pariwisata (M.Par.)</span>
                                 </div>
                             </div>
                             <div class="flex items-start space-x-3">
@@ -341,27 +362,17 @@
                                     <span class="font-medium text-white">Kawasan Wisata Kuta Mandalika</span>
                                 </div>
                             </div>
-                            <div class="flex items-start space-x-3">
-                                <i class="fa-solid fa-award text-accent mt-1"></i>
-                                <div>
-                                    <span class="block text-xs text-gray-300">Kualifikasi Pariwisata</span>
-                                    <span class="font-medium text-white">Magister Pariwisata (M.Par)</span>
-                                </div>
-                            </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Right: Narration & Business Values -->
                 <div class="md:col-span-7 space-y-6 text-gray-200 text-sm sm:text-base leading-relaxed">
                     <p class="text-lg text-white font-medium">
-                        <strong class="text-accent">R&R Transportation Services</strong>, mitra penyedia jasa transportasi tepercaya yang berpusat di Kuta, Lombok Tengah.
+                        <strong class="text-accent">R&R Transportation Services</strong>, mitra penyedia jasa transportasi tepercaya yang berpusat di Kuta Mandalika.
                     </p>
                     <p>
-                        Kami memahami betapa pentingnya kenyamanan, ketepatan waktu, dan keamanan dalam setiap perjalanan liburan maupun bisnis Anda di Pulau Lombok. <br/> Baik Anda membutuhkan pengantaran cepat dari Bandara Internasional Lombok (LOP), eksplorasi pantai-pantai tersembunyi di Mandalika, maupun tur keliling sirkuit dan desa adat, kami siap melayani dengan standar terbaik.
+                        Kami memahami betapa pentingnya kenyamanan, ketepatan waktu, dan keamanan dalam setiap perjalanan liburan maupun bisnis Anda di Pulau Lombok. Baik Anda membutuhkan pengantaran cepat dari Bandara Internasional Lombok, eksplorasi pantai-pantai tersembunyi, maupun tur keliling sirkuit dan desa adat, kami siap melayani dengan standar terbaik.
                     </p>
-
-                    <!-- Feature List -->
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
                         <div class="flex items-center space-x-2 text-sm text-white">
                             <i class="fa-solid fa-circle-check text-accent"></i>
@@ -384,18 +395,15 @@
             </div>
         </section>
 
-        <!-- Section 3: Layanan Utama (Services Grid) -->
+        <!-- Section 3: Layanan Utama -->
         <section id="layanan" class="py-16 px-4 sm:px-6 max-w-6xl mx-auto">
             <div class="text-center mb-12">
                 <span class="text-xs font-bold uppercase tracking-widest text-accent mb-2 block">Pilihan Paket</span>
                 <h2 class="text-2xl sm:text-4xl font-bold text-white">Layanan Utama Kami</h2>
-                <!-- <p class="text-gray-300 text-sm max-w-xl mx-auto mt-2">Pilih paket transportasi yang sesuai dengan jadwal dan kebutuhan perjalanan Anda di Lombok</p> -->
                 <div class="w-16 h-1 bg-accent mx-auto mt-3 rounded-full"></div>
             </div>
 
             <div class="grid md:grid-cols-3 gap-6 sm:gap-8">
-                
-                <!-- Service 1: Airport Transfer -->
                 <div class="bg-custom-card p-6 rounded-3xl flex flex-col justify-between group">
                     <div>
                         <div class="w-14 h-14 rounded-2xl bg-black/30 border border-accent/40 flex items-center justify-center text-accent text-2xl mb-6 group-hover:scale-110 transition-transform">
@@ -411,14 +419,8 @@
                             <li class="flex items-center"><i class="fa-solid fa-check text-accent mr-2"></i> Bantuan Bawa Bagasi</li>
                         </ul>
                     </div>
-                    <!-- <a href="https://wa.me/6281999709135?text=Halo%20R%26R%20Transportation,%20saya%20ingin%20pesan%20Antar-Jemput%20Bandara" 
-                       target="_blank" 
-                       class="w-full text-center py-3 rounded-xl bg-custom-card border border-accent text-accent font-bold text-xs group-hover:bg-accent group-hover:text-black transition-all">
-                        Pesan Drop Bandara
-                    </a> -->
                 </div>
 
-                <!-- Service 2: Car Rental + Driver -->
                 <div class="bg-custom-card p-6 rounded-3xl flex flex-col justify-between group">
                     <div>
                         <div class="w-14 h-14 rounded-2xl bg-black/30 border border-accent/40 flex items-center justify-center text-accent text-2xl mb-6 group-hover:scale-110 transition-transform">
@@ -436,7 +438,6 @@
                     </div>
                 </div>
 
-                <!-- Service 3: Custom Tour -->
                 <div class="bg-custom-card p-6 rounded-3xl flex flex-col justify-between group">
                     <div>
                         <div class="w-14 h-14 rounded-2xl bg-black/30 border border-accent/40 flex items-center justify-center text-accent text-2xl mb-6 group-hover:scale-110 transition-transform">
@@ -453,90 +454,10 @@
                         </ul>
                     </div>
                 </div>
-
             </div>
         </section>
 
-        <!-- Section 4: Interactive Gallery Preview -->
-        <section id="galeri" class="py-16 px-4 sm:px-6 max-w-6xl mx-auto hidden">
-            <div class="bg-custom-card p-6 sm:p-10 rounded-3xl border border-accent/40">
-                <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 mb-8">
-                    <div>
-                        <span class="text-xs font-bold uppercase tracking-widest text-accent block">Pratinjau Tanpa Backend</span>
-                        <h2 class="text-2xl sm:text-3xl font-bold text-white">Galeri Foto & Armada Masa Depan</h2>
-                        <p class="text-xs sm:text-sm text-gray-300 mt-1">Simulasi bagaimana foto kegiatan & kendaraan dapat ditambahkan kapan saja dengan mudah.</p>
-                    </div>
-                    
-                    <!-- Toggle Preview Button -->
-                    <button onclick="toggleGalleryPreview()" id="galleryToggleBtn" 
-                            class="bg-accent text-black font-extrabold text-xs px-5 py-3 rounded-xl hover:scale-105 active:scale-95 transition-all flex items-center space-x-2">
-                        <i class="fa-solid fa-eye" id="galleryIcon"></i>
-                        <span id="galleryBtnText">Buka Pratinjau Galeri Foto</span>
-                    </button>
-                </div>
-
-                <!-- Explanation Banner for Client -->
-                <div class="bg-black/30 p-4 rounded-xl text-xs text-gray-200 border border-white/10 mb-6 flex items-start space-x-3">
-                    <i class="fa-solid fa-circle-info text-accent text-lg mt-0.5"></i>
-                    <div>
-                        <strong class="text-white block mb-0.5">Catatan Teknis Untuk Klien:</strong>
-                        Website statis ini dirancang fleksibel. Saat Pak Rendy memiliki foto kendaraan atau momen penjemputan tamu di Kuta, foto dapat dipasang secara instan tanpa perlu biaya backend atau database bulanan.
-                    </div>
-                </div>
-
-                <!-- Gallery Preview Container -->
-                <div id="galleryContainer" class="hidden grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 pt-2">
-                    
-                    <!-- Card 1 -->
-                    <div class="rounded-2xl overflow-hidden bg-black/30 border border-white/10 hover:border-accent transition-all group">
-                        <div class="h-48 overflow-hidden relative">
-                            <img src="https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?auto=format&fit=crop&w=800&q=80" 
-                                 alt="Armada Mobil MPV" 
-                                 class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                                 onerror="this.src='https://placehold.co/600x400/203E66/FFD166?text=Armada+R%26R+Transportation'">
-                            <span class="absolute bottom-2 left-2 bg-black/70 text-white text-[10px] px-2 py-1 rounded-md font-semibold">Armada MPV</span>
-                        </div>
-                        <div class="p-4">
-                            <h4 class="font-bold text-sm text-white">Toyota Innova Zenix / Reborn</h4>
-                            <p class="text-xs text-gray-300 mt-1">Kapasitas nyaman hingga 6 penumpang dengan kabin dingin & bersih.</p>
-                        </div>
-                    </div>
-
-                    <!-- Card 2 -->
-                    <div class="rounded-2xl overflow-hidden bg-black/30 border border-white/10 hover:border-accent transition-all group">
-                        <div class="h-48 overflow-hidden relative">
-                            <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=80" 
-                                 alt="Pantai Kuta Mandalika Lombok" 
-                                 class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                                 onerror="this.src='https://placehold.co/600x400/203E66/FFD166?text=Destinasi+Kuta+Mandalika'">
-                            <span class="absolute bottom-2 left-2 bg-black/70 text-white text-[10px] px-2 py-1 rounded-md font-semibold">Destinasi</span>
-                        </div>
-                        <div class="p-4">
-                            <h4 class="font-bold text-sm text-white">Kawasan Pantai Kuta Mandalika</h4>
-                            <p class="text-xs text-gray-300 mt-1">Layanan penjemputan langsung ke resort & villa sekitarnya.</p>
-                        </div>
-                    </div>
-
-                    <!-- Card 3 -->
-                    <div class="rounded-2xl overflow-hidden bg-black/30 border border-white/10 hover:border-accent transition-all group">
-                        <div class="h-48 overflow-hidden relative">
-                            <img src="https://images.unsplash.com/photo-1563720223185-11003d516935?auto=format&fit=crop&w=800&q=80" 
-                                 alt="Minibus HiAce" 
-                                 class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                                 onerror="this.src='https://placehold.co/600x400/203E66/FFD166?text=Minibus+Rombongan'">
-                            <span class="absolute bottom-2 left-2 bg-black/70 text-white text-[10px] px-2 py-1 rounded-md font-semibold">Rombongan</span>
-                        </div>
-                        <div class="p-4">
-                            <h4 class="font-bold text-sm text-white">Toyota HiAce Commuter / Premio</h4>
-                            <p class="text-xs text-gray-300 mt-1">Sangat cocok untuk rombongan wisata grup hingga 14 orang.</p>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-        </section>
-
-        <!-- Section 5: Kontak & Reservasi -->
+        <!-- Section 4: Kontak & Reservasi -->
         <section id="kontak" class="py-16 px-4 sm:px-6 max-w-6xl mx-auto">
             <div class="text-center mb-12">
                 <span class="text-xs font-bold uppercase tracking-widest text-accent mb-2 block">Reservasi Mudah</span>
@@ -545,16 +466,12 @@
             </div>
 
             <div class="grid lg:grid-cols-12 gap-8">
-                
-                <!-- Left Column: Contact Cards & Booking Form -->
                 <div class="lg:col-span-7 space-y-6">
-                    
-                    <!-- Direct Contact Quick Badges -->
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
                         <a href="https://wa.me/6281999709135" target="_blank" class="bg-custom-card p-4 rounded-2xl hover:border-accent transition-all text-center group">
                             <i class="fa-brands fa-whatsapp text-2xl text-accent mb-2 group-hover:scale-110 transition-transform"></i>
                             <span class="block text-xs text-gray-300">WhatsApp Direct</span>
-                            <span class="font-bold text-xs text-white">+62 8719-9970-9135</span>
+                            <span class="font-bold text-xs text-white">+62 819-9970-9135</span>
                         </a>
 
                         <a href="mailto:azizslhn1105@gmail.com" class="bg-custom-card p-4 rounded-2xl hover:border-accent transition-all text-center group">
@@ -566,14 +483,13 @@
                         <div class="bg-custom-card p-4 rounded-2xl text-center">
                             <i class="fa-solid fa-location-dot text-2xl text-accent mb-2"></i>
                             <span class="block text-xs text-gray-300">Lokasi Utama</span>
-                            <span class="font-bold text-xs text-white">Kuta, Lombok Tengah</span>
+                            <span class="font-bold text-xs text-white">Kuta Mandalika, Lombok Tengah</span>
                         </div>
                     </div>
 
-                    <!-- Booking Form -->
                     <div class="bg-custom-card p-6 sm:p-8 rounded-3xl">
                         <h3 class="text-xl font-bold text-white mb-2">Formulir Pemesanan Cepat</h3>
-                        <p class="text-xs text-gray-300 mb-6">Isi formulir di bawah ini, data akan langsung terformat otomatis ke WhatsApp Pak Rendy.</p>
+                        <p class="text-xs text-gray-300 mb-6">Isi formulir di bawah ini, data akan langsung terformat otomatis dan dikirim.</p>
 
                         <form id="bookingForm" onsubmit="handleFormSubmit(event)" class="space-y-4">
                             <div>
@@ -599,7 +515,7 @@
                             </div>
 
                             <div>
-                                <label class="block text-xs font-semibold text-gray-200 mb-1">Catatan Tambahan / Lokasi Jemput</label>
+                                <label class="block text-xs font-semibold text-gray-200 mb-1">Catatan Tambahan / Pertanyaan</label>
                                 <textarea id="formPesan" rows="3" placeholder="Sebutkan lokasi penjemputan, jumlah penumpang, atau pertanyaan Anda..." 
                                           class="w-full custom-input border border-white/10 focus:border-accent rounded-xl px-4 py-3 text-sm text-white focus:outline-none transition-colors"></textarea>
                             </div>
@@ -611,10 +527,8 @@
                             </button>
                         </form>
                     </div>
-
                 </div>
 
-                <!-- Right Column: Interactive Google Maps Embed -->
                 <div class="lg:col-span-5">
                     <div class="bg-custom-card p-6 rounded-3xl h-full flex flex-col">
                         <div class="flex items-center justify-between mb-4">
@@ -625,15 +539,13 @@
                             <span class="p-2 bg-black/20 rounded-xl text-accent text-lg"><i class="fa-solid fa-map-location-dot"></i></span>
                         </div>
 
-                        <!-- Embedded Google Maps -->
                         <div class="w-full flex-1 min-h-[300px] rounded-2xl overflow-hidden border border-white/10 relative">
                             <iframe 
-                                title="Peta Lokasi Kuta Lombok"
-                                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3942.825227303033!2d116.2731804!3d-8.8926941!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2dcdb122ddaa82d5%3A0xb3cfbfd060777505!2sKuta%2C%20Pujut%2C%20Central%20Lombok%20Regency%2C%20West%20Nusa%20Tenggara!5e0!3m2!1sen!2sid!4v1700000000000!5m2!1sen!2sid" 
+                                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d31535.490639335232!2d116.24898078382728!3d-8.885512025736471!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2dcda9d023837449%3A0x5030bfbcaf7dc00!2sKuta%2C%20Pujut%2C%20Central%20Lombok%20Regency%2C%20West%20Nusa%20Tenggara!5e0!3m2!1sen!2sid!4v1792763293617!5m2!1sen!2sid" 
                                 class="w-full h-full border-0" 
                                 allowfullscreen="" 
                                 loading="lazy" 
-                                referrerpolicy="no-referrer-when-downgrade">
+                                referrerpolicy="strict-origin-when-cross-origin">
                             </iframe>
                         </div>
 
@@ -642,7 +554,6 @@
                         </div>
                     </div>
                 </div>
-
             </div>
         </section>
 
@@ -651,8 +562,6 @@
     <!-- Footer -->
     <footer class="border-t border-white/10 bg-black/30 py-12 px-4 sm:px-6">
         <div class="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6 text-center md:text-left">
-            
-            <!-- Left: Brand Info -->
             <div class="flex items-center space-x-3">
                 <div class="w-8 h-8 flex-shrink-0">
                     <svg viewBox="0 0 200 200" class="w-full h-full">
@@ -664,29 +573,78 @@
                 </div>
                 <div>
                     <h4 class="text-sm font-bold text-white">R&R Transportation Services</h4>
-                    <p class="text-[11px] text-gray-300">Owned by Muhamad Rendy Wiharno, M.Par.</p>
+                    <p class="text-[11px] text-gray-300">oleh Muhamad Rendy Wiharno, M.Par.</p>
                 </div>
             </div>
 
-            <!-- Center: Quick Nav Links -->
             <div class="flex items-center space-x-6 text-xs text-gray-300">
                 <a href="#profil" class="hover:text-accent transition-colors">Profil</a>
                 <a href="#layanan" class="hover:text-accent transition-colors">Layanan</a>
-                <a href="#galeri" class="hover:text-accent transition-colors">Galeri</a>
                 <a href="#kontak" class="hover:text-accent transition-colors">Kontak</a>
             </div>
 
-            <!-- Right: Copyright -->
             <div class="text-xs text-gray-400">
                 &copy; 2026 R&R Transportation Services. All Rights Reserved.
             </div>
-
         </div>
     </footer>
 
+    <!-- Google Translate Script Initialization -->
+    <script type="text/javascript">
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement({
+                pageLanguage: 'id',
+                includedLanguages: 'id,en',
+                layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
+                autoDisplay: false
+            }, 'google_translate_element');
+        }
+    </script>
+    <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
     <!-- JavaScript Logic -->
     <script>
-        // 1. Theme Switcher Logic (Hitam & Emas <-> Biru Samudera & Kuning)
+        // Current Active Language State
+        let currentLang = localStorage.getItem('preferred_lang') || 'id';
+
+        // Initialize UI language state on page load
+        document.addEventListener("DOMContentLoaded", () => {
+            updateLangUI(currentLang);
+        });
+
+        // 1. Language Toggle Logic (ID <-> EN)
+        function toggleLanguage() {
+            currentLang = (currentLang === 'id') ? 'en' : 'id';
+            localStorage.setItem('preferred_lang', currentLang);
+            
+            updateLangUI(currentLang);
+            applyGoogleTranslate(currentLang);
+        }
+
+        function updateLangUI(lang) {
+            const labels = document.querySelectorAll('.lang-toggle-label');
+            labels.forEach(label => {
+                if (lang === 'en') {
+                    label.innerHTML = 'ID | <strong class="underline font-bold">EN</strong>';
+                } else {
+                    label.innerHTML = '<strong class="underline font-bold">ID</strong> | EN';
+                }
+            });
+        }
+
+        function applyGoogleTranslate(lang) {
+            const select = document.querySelector('.goog-te-combo');
+            if (select) {
+                select.value = lang;
+                select.dispatchEvent(new Event('change'));
+            } else {
+                document.cookie = `googtrans=/id/${lang}; path=/; domain=${window.location.hostname}`;
+                document.cookie = `googtrans=/id/${lang}; path=/`;
+                location.reload();
+            }
+        }
+
+        // 2. Theme Switcher Logic
         function toggleTheme() {
             const htmlEl = document.documentElement;
             const currentTheme = htmlEl.getAttribute('data-theme');
@@ -694,14 +652,14 @@
 
             if (currentTheme === 'dark-gold') {
                 htmlEl.setAttribute('data-theme', 'navy-yellow');
-                themeLabel.innerText = "Tema: Biru Samudera & Kuning";
+                themeLabel.innerText = "Tema: Samudera & Kuning";
             } else {
                 htmlEl.setAttribute('data-theme', 'dark-gold');
                 themeLabel.innerText = "Tema: Hitam & Emas";
             }
         }
 
-        // 2. Mobile Menu Toggle
+        // 3. Mobile Menu Toggle
         function toggleMobileMenu() {
             const menu = document.getElementById('mobileMenu');
             const icon = document.getElementById('menuIcon');
@@ -714,23 +672,6 @@
             }
         }
 
-        // 3. Interactive Gallery Preview Toggle
-        function toggleGalleryPreview() {
-            const container = document.getElementById('galleryContainer');
-            const btnText = document.getElementById('galleryBtnText');
-            const icon = document.getElementById('galleryIcon');
-
-            if (container.classList.contains('hidden')) {
-                container.classList.remove('hidden');
-                btnText.innerText = "Sembunyikan Pratinjau Galeri";
-                icon.className = "fa-solid fa-eye-slash";
-            } else {
-                container.classList.add('hidden');
-                btnText.innerText = "Buka Pratinjau Galeri Foto";
-                icon.className = "fa-solid fa-eye";
-            }
-        }
-
         // 4. Booking Form Handling & WhatsApp Redirection
         function handleFormSubmit(e) {
             e.preventDefault();
@@ -740,21 +681,16 @@
             const tanggal = document.getElementById('formTanggal').value;
             const pesan = document.getElementById('formPesan').value;
 
-            // Format WhatsApp Message
             const waText = `Halo R%26R Transportation Services,%0A%0ASaya ingin memesan layanan:%0A- *Nama*: ${encodeURIComponent(nama)}%0A- *Layanan*: ${encodeURIComponent(layanan)}%0A- *Tanggal*: ${encodeURIComponent(tanggal)}%0A- *Catatan*: ${encodeURIComponent(pesan || 'Tidak ada')}%0A%0AMohon informasi ketersediaan armada dan harganya. Terima kasih!`;
-            
             const waUrl = `https://wa.me/6281999709135?text=${waText}`;
 
-            // Show Toast Notification
             showToast("Pesan Berhasil Disiapkan", "Membuka WhatsApp untuk mengirim rincian...");
 
-            // Redirect to WhatsApp after 1.2 seconds
             setTimeout(() => {
                 window.open(waUrl, '_blank');
             }, 1200);
         }
 
-        // Helper: Toast Notification
         function showToast(title, desc) {
             const toast = document.getElementById('toast');
             document.getElementById('toast-title').innerText = title;
