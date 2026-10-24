@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="id" data-theme="dark-gold" class="scroll-smooth">
+<html lang="en" data-theme="dark-gold" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -27,7 +27,7 @@
     </script>
 
     <style>
-        /* Theme Variables - Theme 1: Hitam & Emas (Default Dark Premium) */
+        /* Theme Variables - Theme 1: Black & Gold (Default Dark Premium) */
         :root, html[data-theme="dark-gold"] {
             --bg-main: #121316;
             --bg-card: #1E1F24;
@@ -40,10 +40,10 @@
             --border-color: rgba(197, 160, 89, 0.3);
             --nav-bg: rgba(18, 19, 22, 0.88);
             --input-bg: rgba(0, 0, 0, 0.4);
-            --theme-name: "Hitam & Emas";
+            --theme-name: "Black & Gold";
         }
 
-        /* Theme Variables - Theme 2: Biru Samudera & Kuning Cerah (Fresh & Vibrant Ocean Navy) */
+        /* Theme Variables - Theme 2: Ocean Navy & Yellow (Fresh & Vibrant Ocean) */
         html[data-theme="navy-yellow"] {
             --bg-main: #162A45;
             --bg-card: #203E66;
@@ -56,7 +56,7 @@
             --border-color: #335C8D;
             --nav-bg: rgba(22, 42, 69, 0.92);
             --input-bg: rgba(15, 29, 48, 0.6);
-            --theme-name: "Samudera & Kuning";
+            --theme-name: "Ocean & Yellow";
         }
 
         body {
@@ -65,6 +65,7 @@
             transition: background-color 0.4s ease, color 0.4s ease;
             top: 0px !important;
             position: relative !important;
+            overflow-x: hidden;
         }
 
         .bg-custom-card {
@@ -98,12 +99,6 @@
             border-color: var(--primary-accent);
         }
 
-        .svg-accent {
-            stroke: var(--primary-accent);
-            fill: none;
-            transition: stroke 0.3s ease;
-        }
-
         /* Glassmorphism Navigation */
         .nav-glass {
             background-color: var(--nav-bg);
@@ -120,16 +115,51 @@
             0%, 100% { box-shadow: 0 0 15px var(--accent-glow); }
             50% { box-shadow: 0 0 28px var(--accent-glow); }
         }
-
-        .glow-active {
-            animation: pulseGlow 3s infinite ease-in-out;
+        /* Bidirectional Scroll Animations (Fade-In and Fade-Out) */
+        .reveal {
+            opacity: 0;
+            transform: translateY(35px);
+            transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+            will-change: opacity, transform;
         }
 
-        /* Google Translate Overrides */
+        .reveal-scale {
+            opacity: 0;
+            transform: scale(0.92) translateY(20px);
+            transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+            will-change: opacity, transform;
+        }
+
+        /* Active State: Triggered when in viewport */
+        .reveal.active, 
+        .reveal-scale.active {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+
+        /* Staggered Delay Utilities */
+        .delay-100 { transition-delay: 100ms; }
+        .delay-200 { transition-delay: 200ms; }
+        .delay-300 { transition-delay: 300ms; }
+        .delay-400 { transition-delay: 400ms; }
+        .delay-500 { transition-delay: 500ms; }
+        .delay-600 { transition-delay: 600ms; }
+        .delay-700 { transition-delay: 700ms; }
+
+        @media (prefers-reduced-motion: reduce) {
+            .reveal {
+                opacity: 1 !important;
+                transform: none !important;
+                transition: none !important;
+            }
+        }
+
+        /* Google Translate Overrides & Hide Default Bar */
         .goog-te-banner-frame.skiptranslate, 
         .goog-te-banner-frame,
         .goog-te-balloon-frame,
-        #goog-gt-tt {
+        #goog-gt-tt,
+        .goog-te-spinner-pos {
             display: none !important;
         }
         
@@ -159,8 +189,8 @@
                 <i class="fa-solid fa-check text-lg"></i>
             </div>
             <div class="flex-1">
-                <h4 class="font-bold text-sm text-accent" id="toast-title">Pesan Diteruskan</h4>
-                <p class="text-xs text-gray-200" id="toast-desc">Membuka aplikasi WhatsApp Anda...</p>
+                <h4 class="font-bold text-sm text-accent" id="toast-title">Message Prepared</h4>
+                <p class="text-xs text-gray-200" id="toast-desc">Opening WhatsApp application...</p>
             </div>
         </div>
     </div>
@@ -169,7 +199,7 @@
     <div class="fixed bottom-4 right-4 z-40 p-2 rounded-2xl shadow-2xl flex items-center space-x-2">
         <button id="themeToggleBtn" onclick="toggleTheme()" class="flex items-center space-x-2 bg-accent text-black font-bold text-xs px-3 py-2 rounded-xl hover:scale-105 active:scale-95 transition-all shadow-md">
             <i class="fa-solid fa-palette"></i>
-            <span id="themeLabel">Tema: Hitam & Emas</span>
+            <span id="themeLabel">Theme: Black & Gold</span>
         </button>
     </div>
 
@@ -179,70 +209,68 @@
             
             <!-- Logo & Brand Header -->
             <a href="#hero" class="flex items-center space-x-3 group">
-                <div class="w-11 h-11 flex-shrink-0 relative group-hover:scale-105 transition-transform duration-300">
-                    <svg viewBox="0 0 200 200" class="w-full h-full drop-shadow-md">
-                        <polygon points="100,8 180,54 180,146 100,192 20,146 20,54" class="svg-accent" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
-                        <polygon points="100,22 168,61 168,139 100,178 32,139 32,61" class="svg-accent" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" opacity="0.85"/>
-                        <path d="M 60,52 L 95,52 L 95,148 M 60,52 L 60,148 M 60,52 L 95,52 L 95,98 L 60,98 M 65,98 L 95,148" class="svg-accent" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
-                        <path d="M 105,52 L 140,52 L 140,105 L 105,105 L 105,148 M 105,52 L 105,148 M 110,105 L 140,148" class="svg-accent" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                </div>
+                <!-- Header Image Logo -->
+                <img src="rr_logo.jfif" 
+                     alt="R&R Logo" 
+                     class="w-12 h-12 flex-shrink-0 object-contain rounded-xl drop-shadow-md group-hover:scale-105 transition-transform duration-300"
+                     onerror="this.onerror=null; this.src='https://placehold.co/120x120/1E1F24/C5A059?text=R%26R';">
                 
                 <div>
-                    <span class="block text-lg font-extrabold tracking-tight text-white group-hover:text-accent transition-colors">
+                    <!-- <span class="block text-lg font-extrabold tracking-tight text-white group-hover:text-accent transition-colors">
                         R&R  <span class="text-accent font-medium text-xs sm:text-sm block sm:inline font-normal">Transportation Services</span>
-                    </span>
-                    <!-- <span class="block text-[10px] uppercase tracking-widest text-gray-300 font-semibold">Kuta Mandalika</span> -->
+                    </span> -->
+                    <span class="text-accent font-medium text-xs sm:text-sm block sm:inline font-normal">Transportation Services</span>
                 </div>
             </a>
 
-            <!-- Desktop Nav Links dengan Efek Hover Line & Glow -->
+            <!-- Desktop Nav Links -->
             <nav class="hidden md:flex items-center space-x-8 text-sm font-medium">
-                <a href="#profil" class="relative py-1 text-gray-200 hover:text-accent transition-all duration-300 group">
-                    <span>Profil</span>
+                <a href="#about" class="relative py-1 text-gray-200 hover:text-accent transition-all duration-300 group">
+                    <span>About Us</span>
                     <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-accent transition-all duration-300 group-hover:w-full rounded-full"></span>
                 </a>
-                <a href="#layanan" class="relative py-1 text-gray-200 hover:text-accent transition-all duration-300 group">
-                    <span>Layanan</span>
+                <a href="#services" class="relative py-1 text-gray-200 hover:text-accent transition-all duration-300 group">
+                    <span>Services</span>
                     <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-accent transition-all duration-300 group-hover:w-full rounded-full"></span>
                 </a>
-                <a href="#kontak" class="relative py-1 text-gray-200 hover:text-accent transition-all duration-300 group">
-                    <span>Kontak</span>
+                <a href="#contact" class="relative py-1 text-gray-200 hover:text-accent transition-all duration-300 group">
+                    <span>Contact</span>
                     <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-accent transition-all duration-300 group-hover:w-full rounded-full"></span>
                 </a>
             </nav>
 
-            <!-- Actions Container (Toggle Bahasa & Mobile Menu Button) -->
+            <!-- Actions Container (Language Switcher & Mobile Menu Button) -->
             <div class="flex items-center space-x-3">
-                <!-- Toggle ID | EN (Diletakkan di luar menu dropdown, di sebelah kiri tombol mobile menu) -->
+                <!-- Toggle EN | ID -->
                 <button onclick="toggleLanguage()" 
-                        class="bg-accent text-black font-extrabold px-3 py-1.5 rounded-xl hover:shadow-lg hover:scale-105 active:scale-95 transition-all flex items-center space-x-1.5 text-xs shadow-md">
+                        class="bg-accent text-black font-extrabold px-3 py-1.5 rounded-xl hover:shadow-lg hover:scale-105 active:scale-95 transition-all flex items-center space-x-1.5 text-xs shadow-md"
+                        aria-label="Toggle Language">
                     <i class="fa-solid fa-globe text-xs"></i>
-                    <span class="lang-toggle-label"><strong class="underline font-bold">ID</strong> | EN</span>
+                    <span class="lang-toggle-label"><strong class="underline font-bold">EN</strong> | ID</span>
                 </button>
 
                 <!-- Mobile Menu Toggle Button -->
-                <button onclick="toggleMobileMenu()" class="md:hidden text-gray-200 hover:text-accent text-xl p-2 rounded-xl hover:bg-white/5 transition-all focus:outline-none">
+                <button onclick="toggleMobileMenu()" class="md:hidden text-gray-200 hover:text-accent text-xl p-2 rounded-xl hover:bg-white/5 transition-all focus:outline-none" aria-label="Toggle Mobile Menu">
                     <i class="fa-solid fa-bars" id="menuIcon"></i>
                 </button>
             </div>
         </div>
 
-        <!-- Mobile Navigation Menu Dropdown (Renggang & Nyaman Diklik) -->
+        <!-- Mobile Navigation Menu Dropdown -->
         <div id="mobileMenu" class="hidden md:hidden bg-custom-card border-b border-white/10 px-6 py-6 space-y-3 transition-all duration-300 shadow-2xl">
-            <a href="#profil" onclick="toggleMobileMenu()" 
+            <a href="#about" onclick="toggleMobileMenu()" 
                class="flex items-center justify-between text-base font-semibold text-gray-200 hover:text-accent hover:pl-2 py-3 border-b border-white/5 transition-all duration-200 group">
-                <span>Profil Usaha</span>
+                <span>About Us</span>
                 <i class="fa-solid fa-chevron-right text-xs opacity-0 group-hover:opacity-100 transition-opacity text-accent"></i>
             </a>
-            <a href="#layanan" onclick="toggleMobileMenu()" 
+            <a href="#services" onclick="toggleMobileMenu()" 
                class="flex items-center justify-between text-base font-semibold text-gray-200 hover:text-accent hover:pl-2 py-3 border-b border-white/5 transition-all duration-200 group">
-                <span>Layanan</span>
+                <span>Services</span>
                 <i class="fa-solid fa-chevron-right text-xs opacity-0 group-hover:opacity-100 transition-opacity text-accent"></i>
             </a>
-            <a href="#kontak" onclick="toggleMobileMenu()" 
+            <a href="#contact" onclick="toggleMobileMenu()" 
                class="flex items-center justify-between text-base font-semibold text-gray-200 hover:text-accent hover:pl-2 py-3 transition-all duration-200 group">
-                <span>Kontak & Reservasi</span>
+                <span>Contact & Reservation</span>
                 <i class="fa-solid fa-chevron-right text-xs opacity-0 group-hover:opacity-100 transition-opacity text-accent"></i>
             </a>
         </div>
@@ -255,62 +283,67 @@
             <div class="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 rounded-full opacity-25 blur-3xl pointer-events-none" style="background-color: var(--primary-accent);"></div>
 
             <div class="max-w-4xl mx-auto text-center relative z-10">
-                <div class="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-custom-card border border-accent mb-6 text-xs sm:text-sm shadow-lg">
+                <!-- Reveal 1: Manager Badge -->
+                <div class="reveal delay-100 inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-custom-card border border-accent mb-6 text-xs sm:text-sm shadow-lg">
                     <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping"></span>
-                    <span class="text-gray-200">Dikelola oleh:</span>
+                    <span class="text-gray-200">Managed by:</span>
                     <span class="font-bold text-accent">Muhamad Rendy Wiharno, M.Par.</span>
                 </div>
 
-                <h1 class="text-3xl sm:text-5xl md:text-6xl font-extrabold tracking-tight leading-tight text-white mb-6">
-                    Solusi Transportasi & Wisata Terbaik di <span class="text-accent underline decoration-wavy decoration-1 underline-offset-8">Mandalika</span>
+                <!-- Reveal 2: Main Headline -->
+                <h1 class="reveal delay-200 text-3xl sm:text-5xl md:text-6xl font-extrabold tracking-tight leading-tight text-white mb-6">
+                    Premier Transportation & Tour Solutions in <span class="text-accent underline decoration-wavy decoration-1 underline-offset-8">Mandalika</span>
                 </h1>
 
-                <p class="text-base sm:text-xl text-gray-200 max-w-2xl mx-auto font-normal leading-relaxed mb-8">
-                    Layanan antar-jemput bandara, sewa mobil lepas kunci maupun dengan driver berpengalaman, serta tur keliling destinasi eksotis Lombok.
+                <!-- Reveal 3: Subtitle -->
+                <p class="reveal delay-300 text-base sm:text-xl text-gray-200 max-w-2xl mx-auto font-normal leading-relaxed mb-8">
+                    Seamless airport transfers, reliable self-drive or chauffeur-driven car rentals, and guided tours exploring the exotic destinations of Lombok.
                 </p>
 
-                <div class="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6">
-                    <a href="https://wa.me/6281999709135?text=Halo%20R%26R%20Transportation,%20saya%20ingin%20pesan%20layanan%20transportasi" 
+                <!-- Reveal 4: CTA Buttons -->
+                <div class="reveal delay-400 flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6">
+                    <a href="https://wa.me/6287861642903?text=Hello%20R%26R,%20I%20would%20like%20to%20book%20a%20transportation%20service." 
                        target="_blank" 
                        class="w-full sm:w-auto bg-accent text-black font-extrabold text-sm sm:text-base px-8 py-4 rounded-2xl shadow-xl hover:scale-105 active:scale-95 transition-all flex items-center justify-center space-x-3 glow-active">
                         <i class="fa-brands fa-whatsapp text-xl"></i>
-                        <span>Pesan via WhatsApp Sekarang</span>
+                        <span>Book via WhatsApp Now</span>
                     </a>
                     
-                    <a href="#layanan" 
+                    <a href="#services" 
                        class="w-full sm:w-auto bg-custom-card text-white font-semibold text-sm sm:text-base px-6 py-4 rounded-2xl border border-white/20 hover:border-accent hover:text-accent transition-all flex items-center justify-center space-x-2">
-                        <span>Lihat Paket Layanan</span>
+                        <span>Explore Service Packages</span>
                         <i class="fa-solid fa-arrow-down text-xs"></i>
                     </a>
                 </div>
 
+                <!-- Reveal 5: Feature Highlights Bar (Staggered) -->
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 mt-12 text-left">
-                    <div class="p-3 sm:p-4 rounded-xl bg-custom-card flex items-center space-x-3">
+                    <div class="reveal delay-100 p-3 sm:p-4 rounded-xl bg-custom-card flex items-center space-x-3">
                         <i class="fa-solid fa-plane-arrival text-accent text-xl sm:text-2xl"></i>
                         <div>
-                            <h4 class="text-xs sm:text-sm font-bold text-white">Antar-Jemput</h4>
-                            <p class="text-[10px] sm:text-xs text-gray-300">Bandara LOP 24 Jam</p>
+                            <h4 class="text-xs sm:text-sm font-bold text-white">Airport Transfer</h4>
+                            <p class="text-[10px] sm:text-xs text-gray-300">24/7 LOP Service</p>
                         </div>
                     </div>
-                    <div class="p-3 sm:p-4 rounded-xl bg-custom-card flex items-center space-x-3">
+                    <div class="reveal delay-200 p-3 sm:p-4 rounded-xl bg-custom-card flex items-center space-x-3">
                         <i class="fa-solid fa-car-side text-accent text-xl sm:text-2xl"></i>
                         <div>
-                            <h4 class="text-xs sm:text-sm font-bold text-white">Kendaraan Bersih</h4>
-                            <p class="text-[10px] sm:text-xs text-gray-300">AC & Terawat</p>
+                            <h4 class="text-xs sm:text-sm font-bold text-white">Clean Vehicles</h4>
+                            <p class="text-[10px] sm:text-xs text-gray-300">A/C & Well-Maintained</p>
                         </div>
                     </div>
-                    <div class="p-3 sm:p-4 rounded-xl bg-custom-card flex items-center space-x-3">
+                    <div class="reveal delay-300 p-3 sm:p-4 rounded-xl bg-custom-card flex items-center space-x-3">
                         <i class="fa-solid fa-user-shield text-accent text-xl sm:text-2xl"></i>
                         <div>
-                            <h4 class="text-xs sm:text-sm font-bold text-white">Driver Lokal</h4>
-                            <p class="text-[10px] sm:text-xs text-gray-300">Ramah & Profesional</p>
+                            <h4 class="text-xs sm:text-sm font-bold text-white">Local Drivers</h4>
+                            <p class="text-[10px] sm:text-xs text-gray-300">Friendly & Professional</p>
                         </div>
                     </div>
-                    <div class="p-3 sm:p-4 rounded-xl bg-custom-card flex items-center space-x-3">
+                    <div class="reveal delay-400 p-3 sm:p-4 rounded-xl bg-custom-card flex items-center space-x-3">
                         <i class="fa-solid fa-graduation-cap text-accent text-xl sm:text-2xl"></i>
                         <div>
-                            <h4 class="text-xs sm:text-sm font-bold text-white">Standar Ahli</h4>
-                            <p class="text-[10px] sm:text-xs text-gray-300">Profesional Pariwisata</p>
+                            <h4 class="text-xs sm:text-sm font-bold text-white">Expert Standard</h4>
+                            <p class="text-[10px] sm:text-xs text-gray-300">Tourism Professional</p>
                         </div>
                     </div>
                 </div>
@@ -318,223 +351,227 @@
             </div>
         </section>
 
-        <!-- Section 2: Profil Usaha -->
-        <section id="profil" class="py-16 px-4 sm:px-6 max-w-6xl mx-auto">
-            <div class="text-center mb-12">
-                <span class="text-xs font-bold uppercase tracking-widest text-accent mb-2 block">Profil & Komitmen</span>
-                <h2 class="text-2xl sm:text-4xl font-bold text-white">Tentang R&R Transportation Services</h2>
+        <!-- Section 2: Business Profile -->
+        <section id="about" class="py-16 px-4 sm:px-6 max-w-6xl mx-auto">
+            <div class="reveal text-center mb-12">
+                <span class="text-xs font-bold uppercase tracking-widest text-accent mb-2 block">Profile & Commitment</span>
+                <h2 class="text-2xl sm:text-4xl font-bold text-white">About R&R Transportation Services</h2>
                 <div class="w-16 h-1 bg-accent mx-auto mt-3 rounded-full"></div>
             </div>
 
             <div class="grid md:grid-cols-12 gap-8 items-center">
-                <div class="md:col-span-5">
+                <!-- Left Profile Card -->
+                <div class="reveal reveal-scale delay-100 md:col-span-5">
                     <div class="bg-custom-card p-6 sm:p-8 rounded-3xl relative overflow-hidden text-center md:text-left">
-                        <div class="w-20 h-20 mx-auto md:mx-0 mb-4">
-                            <svg viewBox="0 0 200 200" class="w-full h-full drop-shadow-md">
-                                <polygon points="100,8 180,54 180,146 100,192 20,146 20,54" class="svg-accent" stroke-width="7"/>
-                                <polygon points="100,22 168,61 168,139 100,178 32,139 32,61" class="svg-accent" stroke-width="4" opacity="0.85"/>
-                                <path d="M 60,52 L 95,52 L 95,148 M 60,52 L 60,148 M 60,52 L 95,52 L 95,98 L 60,98 M 65,98 L 95,148" class="svg-accent" stroke-width="8"/>
-                                <path d="M 105,52 L 140,52 L 140,105 L 105,105 L 105,148 M 105,52 L 105,148 M 110,105 L 140,148" class="svg-accent" stroke-width="8"/>
-                            </svg>
-                        </div>
+                        <img src="rr_logo.jfif" 
+                             alt="R&R Logo Profile" 
+                             class="w-24 h-24 mx-auto md:mx-0 mb-4 object-contain rounded-full drop-shadow-lg"
+                             onerror="this.onerror=null; this.src='https://placehold.co/200x200/1E1F24/C5A059?text=R%26R';">
+
                         <h3 class="text-xl font-bold text-white mb-1">R&R Transportation Services</h3>
-                        <p class="text-xs text-accent font-semibold mb-4">Kuta, Lombok Tengah, NTB</p>
+                        <p class="text-xs text-accent font-semibold mb-4">Kuta, Central Lombok, NTB</p>
                         <hr class="border-white/10 my-4">
                         <div class="space-y-3 text-left text-sm text-gray-200">
                             <div class="flex items-start space-x-3">
                                 <i class="fa-solid fa-user text-accent mt-1"></i>
                                 <div>
-                                    <span class="block text-xs text-gray-300">Pemilik</span>
+                                    <span class="block text-xs text-gray-300">Owner</span>
                                     <span class="font-bold text-white">Muhamad Rendy Wiharno</span>
                                 </div>
                             </div>
                             <div class="flex items-start space-x-3">
                                 <i class="fa-solid fa-award text-accent mt-1"></i>
                                 <div>
-                                    <span class="block text-xs text-gray-300">Kualifikasi</span>
-                                    <span class="font-medium text-white">Magister Pariwisata (M.Par.)</span>
+                                    <span class="block text-xs text-gray-300">Qualification</span>
+                                    <span class="font-medium text-white">Master of Tourism (M.Par.)</span>
                                 </div>
                             </div>
                             <div class="flex items-start space-x-3">
                                 <i class="fa-solid fa-location-dot text-accent mt-1"></i>
                                 <div>
-                                    <span class="block text-xs text-gray-300">Pusat Layanan</span>
-                                    <span class="font-medium text-white">Kawasan Wisata Kuta Mandalika</span>
+                                    <span class="block text-xs text-gray-300">Service Hub</span>
+                                    <span class="font-medium text-white">Kuta Mandalika Tourism Area</span>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="md:col-span-7 space-y-6 text-gray-200 text-sm sm:text-base leading-relaxed">
+                <!-- Right Narrative & Highlights -->
+                <div class="reveal delay-200 md:col-span-7 space-y-6 text-gray-200 text-sm sm:text-base leading-relaxed">
                     <p class="text-lg text-white font-medium">
-                        <strong class="text-accent">R&R Transportation Services</strong>, mitra penyedia jasa transportasi tepercaya yang berpusat di Kuta Mandalika.
+                        Welcome to <strong class="text-accent">R&R Transportation Services</strong>, your trusted travel partner based in Kuta Mandalika, Lombok.
                     </p>
                     <p>
-                        Kami memahami betapa pentingnya kenyamanan, ketepatan waktu, dan keamanan dalam setiap perjalanan liburan maupun bisnis Anda di Pulau Lombok. Baik Anda membutuhkan pengantaran cepat dari Bandara Internasional Lombok, eksplorasi pantai-pantai tersembunyi, maupun tur keliling sirkuit dan desa adat, kami siap melayani dengan standar terbaik.
+                        We understand the importance of comfort, punctuality, and safety during your holiday or business trip in Lombok. Whether you require quick transfers from Lombok International Airport, trips to pristine hidden beaches, or island tours around the circuit and traditional villages, we are committed to delivering top-tier hospitality standards.
                     </p>
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
-                        <div class="flex items-center space-x-2 text-sm text-white">
+                        <div class="reveal delay-300 flex items-center space-x-2 text-sm text-white">
                             <i class="fa-solid fa-circle-check text-accent"></i>
-                            <span>Mobil Nyaman & Bersih</span>
+                            <span>Comfortable & Clean Vehicles</span>
                         </div>
-                        <div class="flex items-center space-x-2 text-sm text-white">
+                        <div class="reveal delay-400 flex items-center space-x-2 text-sm text-white">
                             <i class="fa-solid fa-circle-check text-accent"></i>
-                            <span>Penjemputan Tepat Waktu</span>
+                            <span>Punctual Pickups</span>
                         </div>
-                        <div class="flex items-center space-x-2 text-sm text-white">
+                        <div class="reveal delay-500 flex items-center space-x-2 text-sm text-white">
                             <i class="fa-solid fa-circle-check text-accent"></i>
-                            <span>Pengemudi Ramah & Paham Rute</span>
+                            <span>Friendly & Route-Savvy Drivers</span>
                         </div>
-                        <div class="flex items-center space-x-2 text-sm text-white">
+                        <div class="reveal delay-600 flex items-center space-x-2 text-sm text-white">
                             <i class="fa-solid fa-circle-check text-accent"></i>
-                            <span>Harga Transparan</span>
+                            <span>Transparent Rates</span>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Section 3: Layanan Utama -->
-        <section id="layanan" class="py-16 px-4 sm:px-6 max-w-6xl mx-auto">
-            <div class="text-center mb-12">
-                <span class="text-xs font-bold uppercase tracking-widest text-accent mb-2 block">Pilihan Paket</span>
-                <h2 class="text-2xl sm:text-4xl font-bold text-white">Layanan Utama Kami</h2>
+        <!-- Section 3: Core Services -->
+        <section id="services" class="py-16 px-4 sm:px-6 max-w-6xl mx-auto">
+            <div class="reveal text-center mb-12">
+                <span class="text-xs font-bold uppercase tracking-widest text-accent mb-2 block">Our Packages</span>
+                <h2 class="text-2xl sm:text-4xl font-bold text-white">Main Transportation Services</h2>
                 <div class="w-16 h-1 bg-accent mx-auto mt-3 rounded-full"></div>
             </div>
 
             <div class="grid md:grid-cols-3 gap-6 sm:gap-8">
-                <div class="bg-custom-card p-6 rounded-3xl flex flex-col justify-between group">
+                <!-- Service Card 1 -->
+                <div class="reveal delay-100 bg-custom-card p-6 rounded-3xl flex flex-col justify-between group">
                     <div>
                         <div class="w-14 h-14 rounded-2xl bg-black/30 border border-accent/40 flex items-center justify-center text-accent text-2xl mb-6 group-hover:scale-110 transition-transform">
                             <i class="fa-solid fa-plane-circle-check"></i>
                         </div>
-                        <h3 class="text-xl font-bold text-white mb-3">Antar-Jemput Bandara (LOP)</h3>
+                        <h3 class="text-xl font-bold text-white mb-3">Airport Transfers (LOP)</h3>
                         <p class="text-sm text-gray-200 leading-relaxed mb-6">
-                            Layanan penjemputan dan pengantaran tepat waktu dari/ke Bandara Internasional Lombok menuju Kuta Mandalika, Senggigi, Mataram, atau pelabuhan.
+                            Reliable airport pick-up and drop-off services connecting Lombok International Airport with Kuta Mandalika, Senggigi, Mataram, or harbors.
                         </p>
                         <ul class="space-y-2 text-xs text-gray-300 mb-6">
-                            <li class="flex items-center"><i class="fa-solid fa-check text-accent mr-2"></i> Standby 24 Jam Sesuai Flight</li>
-                            <li class="flex items-center"><i class="fa-solid fa-check text-accent mr-2"></i> Gratis Bebas Denda Delay Pesawat</li>
-                            <li class="flex items-center"><i class="fa-solid fa-check text-accent mr-2"></i> Bantuan Bawa Bagasi</li>
+                            <li class="flex items-center"><i class="fa-solid fa-check text-accent mr-2"></i> 24/7 Flight-Matched Standby</li>
+                            <li class="flex items-center"><i class="fa-solid fa-check text-accent mr-2"></i> No Extra Fee for Delayed Flights</li>
+                            <li class="flex items-center"><i class="fa-solid fa-check text-accent mr-2"></i> Complimentary Luggage Handling</li>
                         </ul>
                     </div>
                 </div>
 
-                <div class="bg-custom-card p-6 rounded-3xl flex flex-col justify-between group">
+                <!-- Service Card 2 -->
+                <div class="reveal delay-200 bg-custom-card p-6 rounded-3xl flex flex-col justify-between group">
                     <div>
                         <div class="w-14 h-14 rounded-2xl bg-black/30 border border-accent/40 flex items-center justify-center text-accent text-2xl mb-6 group-hover:scale-110 transition-transform">
                             <i class="fa-solid fa-car-rear"></i>
                         </div>
-                        <h3 class="text-xl font-bold text-white mb-3">Sewa Mobil + Driver</h3>
+                        <h3 class="text-xl font-bold text-white mb-3">Car Rental + Chauffeur</h3>
                         <p class="text-sm text-gray-200 leading-relaxed mb-6">
-                            Sewa armada kendaraan harian lengkap dengan pengemudi lokal berpengalaman. Bebas tentukan tujuan wisata di area Kuta Mandalika dan sekitarnya.
+                            Flexible daily vehicle rentals accompanied by experienced local drivers. Enjoy total freedom exploring Kuta Mandalika and beyond.
                         </p>
                         <ul class="space-y-2 text-xs text-gray-300 mb-6">
-                            <li class="flex items-center"><i class="fa-solid fa-check text-accent mr-2"></i> Opsi Harian (12 Jam / Full Day)</li>
-                            <li class="flex items-center"><i class="fa-solid fa-check text-accent mr-2"></i> BBM + Driver Profesional Included</li>
-                            <li class="flex items-center"><i class="fa-solid fa-check text-accent mr-2"></i> Mobil Bersih & Wangi</li>
+                            <li class="flex items-center"><i class="fa-solid fa-check text-accent mr-2"></i> Daily Rental Options (12h / Full Day)</li>
+                            <li class="flex items-center"><i class="fa-solid fa-check text-accent mr-2"></i> Fuel & Professional Driver Included</li>
+                            <li class="flex items-center"><i class="fa-solid fa-check text-accent mr-2"></i> Spotless & Fresh Fleet</li>
                         </ul>
                     </div>
                 </div>
 
-                <div class="bg-custom-card p-6 rounded-3xl flex flex-col justify-between group">
+                <!-- Service Card 3 -->
+                <div class="reveal delay-300 bg-custom-card p-6 rounded-3xl flex flex-col justify-between group">
                     <div>
                         <div class="w-14 h-14 rounded-2xl bg-black/30 border border-accent/40 flex items-center justify-center text-accent text-2xl mb-6 group-hover:scale-110 transition-transform">
                             <i class="fa-solid fa-compass-drafting"></i>
                         </div>
-                        <h3 class="text-xl font-bold text-white mb-3">Tur Wisata Lombok</h3>
+                        <h3 class="text-xl font-bold text-white mb-3">Lombok Island Tours</h3>
                         <p class="text-sm text-gray-200 leading-relaxed mb-6">
-                            Rencanakan rute liburan impian Anda bersama pemandu profesional. Kunjungi Sirkuit Mandalika, Tanjung Aan, Gili Trawangan, dll.
+                            Craft your dream holiday itinerary with local tourism experts. Visit Mandalika Circuit, Tanjung Aan, Gili Islands, and cultural landmarks.
                         </p>
                         <ul class="space-y-2 text-xs text-gray-300 mb-6">
-                            <li class="flex items-center"><i class="fa-solid fa-check text-accent mr-2"></i> Konsultasi Wisata</li>
-                            <li class="flex items-center"><i class="fa-solid fa-check text-accent mr-2"></i> Cocok Untuk Perorangan / Keluarga</li>
-                            <li class="flex items-center"><i class="fa-solid fa-check text-accent mr-2"></i> Rekomendasi Kuliner Khas Lombok</li>
+                            <li class="flex items-center"><i class="fa-solid fa-check text-accent mr-2"></i> Custom Itinerary Consultation</li>
+                            <li class="flex items-center"><i class="fa-solid fa-check text-accent mr-2"></i> Ideal for Solo Travelers & Families</li>
+                            <li class="flex items-center"><i class="fa-solid fa-check text-accent mr-2"></i> Local Culinary Recommendations</li>
                         </ul>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Section 4: Kontak & Reservasi -->
-        <section id="kontak" class="py-16 px-4 sm:px-6 max-w-6xl mx-auto">
-            <div class="text-center mb-12">
-                <span class="text-xs font-bold uppercase tracking-widest text-accent mb-2 block">Reservasi Mudah</span>
-                <h2 class="text-2xl sm:text-4xl font-bold text-white">Hubungi & Lokasi Kami</h2>
+        <!-- Section 4: Contact & Reservation -->
+        <section id="contact" class="py-16 px-4 sm:px-6 max-w-6xl mx-auto">
+            <div class="reveal text-center mb-12">
+                <span class="text-xs font-bold uppercase tracking-widest text-accent mb-2 block">Instant Booking</span>
+                <h2 class="text-2xl sm:text-4xl font-bold text-white">Contact & Location</h2>
                 <div class="w-16 h-1 bg-accent mx-auto mt-3 rounded-full"></div>
             </div>
 
             <div class="grid lg:grid-cols-12 gap-8">
+                <!-- Contact Form & Fast Info -->
                 <div class="lg:col-span-7 space-y-6">
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                        <a href="https://wa.me/6281999709135" target="_blank" class="bg-custom-card p-4 rounded-2xl hover:border-accent transition-all text-center group">
+                        <a href="https://wa.me/6287861642903" target="_blank" class="reveal delay-100 bg-custom-card p-4 rounded-2xl hover:border-accent transition-all text-center group">
                             <i class="fa-brands fa-whatsapp text-2xl text-accent mb-2 group-hover:scale-110 transition-transform"></i>
                             <span class="block text-xs text-gray-300">WhatsApp Direct</span>
-                            <span class="font-bold text-xs text-white">+62 819-9970-9135</span>
+                            <span class="font-bold text-xs text-white">+62 878-6164-2903</span>
                         </a>
 
-                        <a href="mailto:azizslhn1105@gmail.com" class="bg-custom-card p-4 rounded-2xl hover:border-accent transition-all text-center group">
+                        <a href="mailto:wiharnorendy@gmail.com" class="reveal delay-200 bg-custom-card p-4 rounded-2xl hover:border-accent transition-all text-center group">
                             <i class="fa-solid fa-envelope text-2xl text-accent mb-2 group-hover:scale-110 transition-transform"></i>
                             <span class="block text-xs text-gray-300">Email</span>
-                            <span class="font-bold text-xs text-white">azizslhn1105@gmail.com</span>
+                            <span class="font-bold text-xs text-white">wiharnorendy@gmail.com</span>
                         </a>
 
-                        <div class="bg-custom-card p-4 rounded-2xl text-center">
+                        <div class="reveal delay-300 bg-custom-card p-4 rounded-2xl text-center">
                             <i class="fa-solid fa-location-dot text-2xl text-accent mb-2"></i>
-                            <span class="block text-xs text-gray-300">Lokasi Utama</span>
-                            <span class="font-bold text-xs text-white">Kuta Mandalika, Lombok Tengah</span>
+                            <span class="block text-xs text-gray-300">Primary Hub</span>
+                            <span class="font-bold text-xs text-white">Kuta Mandalika, Central Lombok</span>
                         </div>
                     </div>
 
-                    <div class="bg-custom-card p-6 sm:p-8 rounded-3xl">
-                        <h3 class="text-xl font-bold text-white mb-2">Formulir Pemesanan Cepat</h3>
-                        <p class="text-xs text-gray-300 mb-6">Isi formulir di bawah ini, data akan langsung terformat otomatis dan dikirim.</p>
+                    <div class="reveal delay-200 bg-custom-card p-6 sm:p-8 rounded-3xl">
+                        <h3 class="text-xl font-bold text-white mb-2">Quick Reservation Form</h3>
+                        <p class="text-xs text-gray-300 mb-6">Complete the form below. Your request will automatically format and send via WhatsApp.</p>
 
                         <form id="bookingForm" onsubmit="handleFormSubmit(event)" class="space-y-4">
                             <div>
-                                <label class="block text-xs font-semibold text-gray-200 mb-1">Nama Lengkap *</label>
-                                <input type="text" id="formNama" required placeholder="Contoh: Budi Santoso" 
+                                <label class="block text-xs font-semibold text-gray-200 mb-1">Full Name *</label>
+                                <input type="text" id="formNama" required placeholder="e.g., John Doe" 
                                        class="w-full custom-input border border-white/10 focus:border-accent rounded-xl px-4 py-3 text-sm text-white focus:outline-none transition-colors">
                             </div>
 
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                 <div>
-                                    <label class="block text-xs font-semibold text-gray-200 mb-1">Pilihan Layanan *</label>
+                                    <label class="block text-xs font-semibold text-gray-200 mb-1">Select Service *</label>
                                     <select id="formLayanan" required class="w-full custom-input border border-white/10 focus:border-accent rounded-xl px-4 py-3 text-sm text-white focus:outline-none transition-colors">
-                                        <option value="Antar-Jemput Bandara (LOP)">Antar-Jemput Bandara (LOP)</option>
-                                        <option value="Sewa Mobil + Driver Kuta">Sewa Mobil + Driver</option>
-                                        <option value="Tur Wisata Custom Lombok">Tur Wisata Lombok</option>
+                                        <option value="Airport Transfer (LOP)">Airport Transfer (LOP)</option>
+                                        <option value="Car Rental + Chauffeur">Car Rental + Chauffeur</option>
+                                        <option value="Custom Lombok Tour">Custom Lombok Tour</option>
                                     </select>
                                 </div>
                                 <div>
-                                    <label class="block text-xs font-semibold text-gray-200 mb-1">Tanggal Perjalanan *</label>
+                                    <label class="block text-xs font-semibold text-gray-200 mb-1">Travel Date *</label>
                                     <input type="date" id="formTanggal" required 
                                            class="w-full custom-input border border-white/10 focus:border-accent rounded-xl px-4 py-3 text-sm text-white focus:outline-none transition-colors">
                                 </div>
                             </div>
 
                             <div>
-                                <label class="block text-xs font-semibold text-gray-200 mb-1">Catatan Tambahan / Pertanyaan</label>
-                                <textarea id="formPesan" rows="3" placeholder="Sebutkan lokasi penjemputan, jumlah penumpang, atau pertanyaan Anda..." 
+                                <label class="block text-xs font-semibold text-gray-200 mb-1">Additional Notes / Special Requests</label>
+                                <textarea id="formPesan" rows="3" placeholder="Specify pickup spot, passenger count, or questions..." 
                                           class="w-full custom-input border border-white/10 focus:border-accent rounded-xl px-4 py-3 text-sm text-white focus:outline-none transition-colors"></textarea>
                             </div>
 
                             <button type="submit" 
                                     class="w-full bg-accent text-black font-extrabold text-sm py-4 rounded-xl shadow-lg hover:scale-[1.01] active:scale-98 transition-all flex items-center justify-center space-x-2">
                                 <i class="fa-brands fa-whatsapp text-lg"></i>
-                                <span>Kirim Pesan ke WhatsApp</span>
+                                <span>Send Message via WhatsApp</span>
                             </button>
                         </form>
                     </div>
                 </div>
 
-                <div class="lg:col-span-5">
+                <!-- Google Maps Container -->
+                <div class="reveal reveal-scale delay-300 lg:col-span-5">
                     <div class="bg-custom-card p-6 rounded-3xl h-full flex flex-col">
                         <div class="flex items-center justify-between mb-4">
                             <div>
-                                <h3 class="text-lg font-bold text-white">Area Layanan Utama</h3>
-                                <p class="text-xs text-gray-300">Kuta, Lombok Tengah & Sekitarnya</p>
+                                <h3 class="text-lg font-bold text-white">Primary Operating Area</h3>
+                                <p class="text-xs text-gray-300">Kuta, Central Lombok & Surrounding Areas</p>
                             </div>
                             <span class="p-2 bg-black/20 rounded-xl text-accent text-lg"><i class="fa-solid fa-map-location-dot"></i></span>
                         </div>
@@ -550,7 +587,7 @@
                         </div>
 
                         <div class="mt-4 p-3 bg-black/20 rounded-xl text-xs text-gray-300 flex items-center justify-between">
-                            <span><i class="fa-solid fa-shield-halved text-accent mr-1"></i> Siap Melayani Seluruh Area Pulau Lombok</span>
+                            <span><i class="fa-solid fa-shield-halved text-accent mr-1"></i> Serving All Destinations Across Lombok Island</span>
                         </div>
                     </div>
                 </div>
@@ -560,27 +597,24 @@
     </main>
 
     <!-- Footer -->
-    <footer class="border-t border-white/10 bg-black/30 py-12 px-4 sm:px-6">
+    <footer class="reveal border-t border-white/10 bg-black/30 py-12 px-4 sm:px-6">
         <div class="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6 text-center md:text-left">
             <div class="flex items-center space-x-3">
-                <div class="w-8 h-8 flex-shrink-0">
-                    <svg viewBox="0 0 200 200" class="w-full h-full">
-                        <polygon points="100,8 180,54 180,146 100,192 20,146 20,54" class="svg-accent" stroke-width="8"/>
-                        <polygon points="100,22 168,61 168,139 100,178 32,139 32,61" class="svg-accent" stroke-width="4"/>
-                        <path d="M 60,52 L 95,52 L 95,148 M 60,52 L 60,148 M 60,52 L 95,52 L 95,98 L 60,98 M 65,98 L 95,148" class="svg-accent" stroke-width="10"/>
-                        <path d="M 105,52 L 140,52 L 140,105 L 105,105 L 105,148 M 105,52 L 105,148 M 110,105 L 140,148" class="svg-accent" stroke-width="10"/>
-                    </svg>
-                </div>
+                <img src="rr_logo.jfif" 
+                     alt="R&R Logo Footer" 
+                     class="w-10 h-10 flex-shrink-0 object-contain rounded-xl drop-shadow-md"
+                     onerror="this.onerror=null; this.src='https://placehold.co/100x100/1E1F24/C5A059?text=R%26R';">
+                
                 <div>
                     <h4 class="text-sm font-bold text-white">R&R Transportation Services</h4>
-                    <p class="text-[11px] text-gray-300">oleh Muhamad Rendy Wiharno, M.Par.</p>
+                    <p class="text-[11px] text-gray-300">by Muhamad Rendy Wiharno, M.Par.</p>
                 </div>
             </div>
 
             <div class="flex items-center space-x-6 text-xs text-gray-300">
-                <a href="#profil" class="hover:text-accent transition-colors">Profil</a>
-                <a href="#layanan" class="hover:text-accent transition-colors">Layanan</a>
-                <a href="#kontak" class="hover:text-accent transition-colors">Kontak</a>
+                <a href="#about" class="hover:text-accent transition-colors">About Us</a>
+                <a href="#services" class="hover:text-accent transition-colors">Services</a>
+                <a href="#contact" class="hover:text-accent transition-colors">Contact</a>
             </div>
 
             <div class="text-xs text-gray-400">
@@ -593,8 +627,8 @@
     <script type="text/javascript">
         function googleTranslateElementInit() {
             new google.translate.TranslateElement({
-                pageLanguage: 'id',
-                includedLanguages: 'id,en',
+                pageLanguage: 'en',
+                includedLanguages: 'en,id',
                 layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
                 autoDisplay: false
             }, 'google_translate_element');
@@ -604,17 +638,18 @@
 
     <!-- JavaScript Logic -->
     <script>
-        // Current Active Language State
-        let currentLang = localStorage.getItem('preferred_lang') || 'id';
+        // Current Active Language State (Default: EN)
+        let currentLang = localStorage.getItem('preferred_lang') || 'en';
 
-        // Initialize UI language state on page load
+        // Initialize UI language state and animations on page load
         document.addEventListener("DOMContentLoaded", () => {
             updateLangUI(currentLang);
+            initScrollObserver();
         });
 
-        // 1. Language Toggle Logic (ID <-> EN)
+        // 1. Language Toggle Logic (EN <-> ID)
         function toggleLanguage() {
-            currentLang = (currentLang === 'id') ? 'en' : 'id';
+            currentLang = (currentLang === 'en') ? 'id' : 'en';
             localStorage.setItem('preferred_lang', currentLang);
             
             updateLangUI(currentLang);
@@ -624,10 +659,10 @@
         function updateLangUI(lang) {
             const labels = document.querySelectorAll('.lang-toggle-label');
             labels.forEach(label => {
-                if (lang === 'en') {
-                    label.innerHTML = 'ID | <strong class="underline font-bold">EN</strong>';
+                if (lang === 'id') {
+                    label.innerHTML = 'EN | <strong class="underline font-bold">ID</strong>';
                 } else {
-                    label.innerHTML = '<strong class="underline font-bold">ID</strong> | EN';
+                    label.innerHTML = '<strong class="underline font-bold">EN</strong> | ID';
                 }
             });
         }
@@ -638,8 +673,8 @@
                 select.value = lang;
                 select.dispatchEvent(new Event('change'));
             } else {
-                document.cookie = `googtrans=/id/${lang}; path=/; domain=${window.location.hostname}`;
-                document.cookie = `googtrans=/id/${lang}; path=/`;
+                document.cookie = `googtrans=/en/${lang}; path=/; domain=${window.location.hostname}`;
+                document.cookie = `googtrans=/en/${lang}; path=/`;
                 location.reload();
             }
         }
@@ -652,10 +687,10 @@
 
             if (currentTheme === 'dark-gold') {
                 htmlEl.setAttribute('data-theme', 'navy-yellow');
-                themeLabel.innerText = "Tema: Samudera & Kuning";
+                themeLabel.innerText = "Theme: Ocean & Yellow";
             } else {
                 htmlEl.setAttribute('data-theme', 'dark-gold');
-                themeLabel.innerText = "Tema: Hitam & Emas";
+                themeLabel.innerText = "Theme: Black & Gold";
             }
         }
 
@@ -681,10 +716,10 @@
             const tanggal = document.getElementById('formTanggal').value;
             const pesan = document.getElementById('formPesan').value;
 
-            const waText = `Halo R%26R Transportation Services,%0A%0ASaya ingin memesan layanan:%0A- *Nama*: ${encodeURIComponent(nama)}%0A- *Layanan*: ${encodeURIComponent(layanan)}%0A- *Tanggal*: ${encodeURIComponent(tanggal)}%0A- *Catatan*: ${encodeURIComponent(pesan || 'Tidak ada')}%0A%0AMohon informasi ketersediaan armada dan harganya. Terima kasih!`;
-            const waUrl = `https://wa.me/6281999709135?text=${waText}`;
+            const waText = `Hello R%26R,%0A%0AI would like to book a service:%0A- *Name*: ${encodeURIComponent(nama)}%0A- *Service*: ${encodeURIComponent(layanan)}%0A- *Date*: ${encodeURIComponent(tanggal)}%0A- *Notes*: ${encodeURIComponent(pesan || 'None')}%0A%0APlease let me know the vehicle availability and rates. Thank you!`;
+            const waUrl = `https://wa.me/6287861642903?text=${waText}`;
 
-            showToast("Pesan Berhasil Disiapkan", "Membuka WhatsApp untuk mengirim rincian...");
+            showToast("Message Prepared", "Opening WhatsApp to send details...");
 
             setTimeout(() => {
                 window.open(waUrl, '_blank');
@@ -703,6 +738,30 @@
                 toast.classList.remove('translate-y-0', 'opacity-100');
                 toast.classList.add('translate-y-[-150%]', 'opacity-0', 'pointer-events-none');
             }, 3500);
+        }
+
+        // 5. Bidirectional Scroll Animation Observer (Fade-In & Fade-Out)
+        function initScrollObserver() {
+            const observerOptions = {
+                root: null,
+                rootMargin: '-20px 0px -20px 0px',
+                threshold: 0.12
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        // Element entered viewport -> Fade In
+                        entry.target.classList.add('active');
+                    } else {
+                        // Element exited viewport -> Fade Out
+                        entry.target.classList.remove('active');
+                    }
+                });
+            }, observerOptions);
+
+            const animatedElements = document.querySelectorAll('.reveal, .reveal-scale');
+            animatedElements.forEach(el => observer.observe(el));
         }
     </script>
 </body>
